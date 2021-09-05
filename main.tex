@@ -1,0 +1,236 @@
+
+\documentclass[12]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{ragged2e}
+\linespread{1.35} 
+\begin{titlepage}
+ \begin{center}
+        \vspace{1cm}
+            
+        \Huge
+        \textbf{Functional Determinants by Contour Integration Methods}
+            
+        \vspace{1cm}
+        \LARGE
+        AM4817 - Methods of Applied Mathematics
+            
+        \vspace{2cm}
+        
+        \textbf{Final Project}
+        
+        \vspace{1cm}
+        
+        \textbf{James Wing-Chee Graham}
+        
+        
+            
+            
+ \end{center}           
+\end{titlepage}
+ 
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+
+\begin{document}
+
+
+\section{Introduction}
+\setlength{\parindent}{0pt}
+
+Functional determinants by contour integration methods is a paper published by Klaus Kirsten of the Max Planck Institute for Mathematics in the Sciences, and Alan J. McKane from the Department of Theoretical Physics in University of Manchester. Functional determinants are a generalization of the notion of determinants of finite dimensional matrices to linear differential operators on infinite dimensional Hilbert spaces. The paper contains a detailed yet accessible set of derivations for the standard formulae for functional determinants using the contour integration methods that we learned in class. This paper extends what we learned about Sturm-Louville theory, and specifically uses the eigenvalue problem representation of the S-L problems under study in the paper. In particular, it exploits properties of the Spectral Riemann Zeta function (which can incidentally be expressed as a Mellin transform, though we will not use this fact here), and arises in spectral theory as an infinite dimensional generalization of the trace of a matrix [\ref{spec}]. In the case of this paper, the Zeta function of a linear differential operator can be related to the functional determinant of the operator by the means of contour integration in the complex plane. Transforms and contour integration methods for analysis of differential equations was a large topic of study in this course, and this project seeks to provide an extension of these kinds of techniques. Lastly, asymptotic approximation of integrals is used in the paper in order to simplify the contour integrals that yield the functional determinants, which provides an application of this material that we learned in class. \\
+
+
+\\
+
+Before we describe the contents of this report, we will briefly describe the structure of the paper under study.
+The paper we are summarizing has five main sections. The first section details the contour integration method for evaluating functional determinants using a simple, pedagogical example of a second order differential operator with Dirichlet boundary conditions. In the next section, the authors then quickly generalize to the case of when a zero mode is present for the aforementioned system, and details how the functional determinant changes in scenarios with zero modes present such as this. The next two sections extend the method to general boundary conditions with and without zero-modes present, respectively. Finally, the last section briefly extends the method to systems of differential equations--which we will not discuss in the interest of brevity, as it is not the main focus of the paper. We will illustrate the details of the first section of their paper as our methodology immediately following the introduction, and then leave all the subsequent implementations of the method to the next section: problem and applications. In this section, we will go over the case of general boundary conditions and exclusion of zero-modes for the problem this paper approaches. We will also describe the significance and application of the evaluation of functional determinants arising in Quantum Field Theory. We will then discuss the results of the paper in the following section, namely that the standard formulae for functional determinants can be re-derived using these contour integration methods, as well as novel generalizations of these aforementioned formulae for case of the presence of zero-modes in the system, and also for S-L problems with general boundary conditions. In the final section, we will give a detailed analysis of the utility, efficacy, and applicability of the methods presented in this paper. We will discuss this paper in the context of it's utility in Quantum Field Theory as well as providing balanced criticism of the effectiveness of the paper from a holistic perspective. 
+
+\section{Methodology}
+
+We will now present the method of evaluation of functional determinants by contour integration as described in the paper. Before we proceed, it should be noted that for many physical applications of linear operator theory, the linear differential operators under study are unbounded operators. That is, the image of their mapping is unbounded, and thus the trace and determinant are usually undefined in a conventional sense. Thus, in order to understand such quantities for unbounded operators such as (\ref{secondorderoperator}) below, the standard approach is to perform a sort of regularization procedure where one takes the ratio of two similar unbounded operators defined on the same interval, often with the same leading order term. \\
+
+In order for a clear and instructive pedagogical approach, the authors of the paper first implement this method on the simple system of a canonical second-order linear differential operator on the interval \([0,1]\) with Dirichlet boundary conditions. This differential operator under study can be written as: 
+
+\begin{equation} \label{secondorderoperator}
+    L_j = -\frac{d^2}{dx^2} + R_j(x)
+\end{equation} 
+
+Where \(R_j(x)\) is an arbitrary continuous function such that all the eigenvalues of the operator are positive. Here, the index \(j \in (1,2)\) refers to the operator under study, where \(j = 1\) denotes the operator we seek to calculate the functional determinant of, and \(j = 2\) denotes some standard reference operator defined similarly on \([0,1]\) and with same leading order behaviour. \\
+
+Firstly, consider the eigenvalue problem of this differential operator, namely:
+
+\begin{equation} \label{eigvalprob}
+    L_j u_{j,k}(x) = k^2 u_{j,k}(x)
+\end{equation} 
+
+Where k is a complex eigenvalue. In order to fix the eigenvalues, we implement the boundary condition for \(x^* = 0,1\)
+
+\begin{equation} \label{BC}
+    u_{j,k}(x^*) = 0    
+\end{equation} 
+
+We also assume that \(u_{j,k}(1)\) is analytic for all real values of k greater than zero so that we can exploit properties of this S-L problem and define the Spectral Riemman Zeta function to obtain the functional determinant. For generality, we also define constants \(c_1 = 1\) and \(c_2 = 1\) corresponding to operators \(j = 1,2\) so we can make the arbitrary choice of normalization of our eigenfunctions \(u_{j,k}(x)\) such that:
+
+\begin{equation} \label{BC2}
+    u^{'}_{j,k}(0) = c_j   
+\end{equation} 
+
+The spectral zeta function of (\ref{eigvalprob}) is defined as [\ref{spec}]:
+
+\begin{equation} \label{zetasum}
+    \zeta(s) = \sum_{k} k^{-2s}
+\end{equation} 
+
+which is a convergent sum for \(Re(s) > \frac{1}{2}\) (consider a complex-valued, continuous generalization of p-series) over all the complex eigenvalues k of the S-L problem (\ref{eigvalprob}). Exploiting Cauchy's Residue theorem from complex analysis, we can write \(\zeta(s)\) as a contour integral as defined below [\ref{spec}]:
+
+\begin{equation} \label{zeta}
+    \zeta_{L_j}(s) = \frac{1}{2\pi i} \oint\limits_{\gamma}dk k^{-2s} \frac{d}{dk} \ln{u_{j,k}(1)} \\
+\end{equation} 
+
+Where \(\gamma\) is a counter-clockwise semi-circular contour in the right half of the complex plane with its diameter straddling the imaginary axis. Note that here there is no \(k = 0\) mode, and so we do not have to avoid the origin when we deform the contour below, though this will not be the case for the generalizations below in the next section. Taking the difference of the zeta functions for both our operators \(j = 1,2\), we have:
+
+\begin{equation} \label{zeta2}
+    \zeta_{L_1}(s) -  \zeta_{L_2}(s) = \frac{1}{2\pi i} \oint\limits_{\gamma}dk k^{-2s} \frac{d}{dk} \frac{\ln{u_{1,k}(1)}}{\ln{u_{2,k}(1)}} \\
+\end{equation} 
+
+It can be shown that the functional determinant of our operator can be related to an analytic continuation \((s=0)\) of the derivative of the zeta function [\ref{funcdet}]. We will evaluate our functional determinant by means of the relation: 
+
+\begin{equation} \label{det}
+    \frac{\det{L_1}}{\det{L_2}} = e^{\zeta^{'}_{L_1}(0) - \zeta^{'}_{L_2}(0)} \\
+\end{equation} 
+
+We now deform the contour to the imaginary axis by performing an asymptotic approximation of this contour integral. The leading \(|k| \longrightarrow  \infty\) behaviour of our solutions \(u_{j,k}(x)\) renders the contribution of \(R_j(x)\) negligible, and thus our solution goes like [\ref{func}]: 
+
+\begin{equation} \label{eigvalprob}
+    u_{j,k}(x) \sim sin(kx)[1 + \mathcal{O}(k^{-1})]
+\end{equation} 
+
+which implies for \(|k| \longrightarrow  \infty\) 
+
+\begin{equation} \label{eigvalprob}
+   \frac{d}{dk}\ln{\frac{u_{1,k}(1)}{u_{2,k}(1)}} \sim \mathcal{O}(k^{-2})
+\end{equation} 
+
+and so it can be shown the integrand vanishes along the radial contour for \(|k| \longrightarrow  \infty\) [\ref{func}]. We now parameterize the deformed contour as \( k = ik + \epsilon\) for small \(\epsilon > 0\), and then take the limit to make \(\epsilon\) vanish. Thus, (\ref{zeta2}) becomes:
+
+\begin{equation} \label{zeta3}
+    \zeta_{L_1}(s) -  \zeta_{L_2}(s) = \lim_{\epsilon\to0} \frac{1}{2 \pi i} \int\limits_{\infty}^{-\infty}dk (ik + \epsilon)^{-2s} \frac{d}{dk} \frac{\ln{u_{1,ik}(1)}}{\ln{u_{2,ik}(1)}} \\
+\end{equation} 
+
+Writing \( i = e^{\frac{i\pi}{2}} \) and splitting up the integral into the sum of two terms where the limits reflect the regions \(k > 0\) and \(k < 0\), we recover:
+
+\begin{equation} \label{zeta4}
+    \zeta_{L_1}(s) -  \zeta_{L_2}(s) = \frac{\sin(\pi s)}{\pi} \int\limits_{0}^{\infty}dk k^{-2s} \frac{d}{dk} \frac{\ln{u_{1,ik}(1)}}{\ln{u_{2,ik}(1)}} \\
+\end{equation} 
+
+Now taking derivatives, and plugging in \(s = 0\):
+
+\begin{equation} \label{zeta5}
+    \zeta^{'}_{L_1}(0) -  \zeta^{'}_{L_2}(0) = \int\limits_{0}^{\infty}dk \frac{d}{dk} \frac{\ln{u_{1,ik}(1)}}{\ln{u_{2,ik}(1)}} = -\ln{\frac{u_{1,0}(1)}{u_{2,0}(1)}} = -\ln{\frac{y_1(1)}{y_2(1)}}
+\end{equation} 
+
+Where \(y_1(x)\) and \(y_2(x)\) are solutions to the homogeneous equation \( L_j u_{j,k}(x) = 0 \). If we had chosen a different normalization for our problem, The integral (\ref{zeta5}) would no longer vanish at infinity [\ref{func}], and we would have recovered the canonical result:
+
+\begin{equation} \label{solution}
+    \frac{\det{L_1}}{\det{L_2}} = \frac{c_2y_1(1)}{c_1y_2(1)} = \frac{y_1(1)y^{'}_2(0)}{y_2(1)y^{'}_1(0)}
+\end{equation} 
+
+which reproduces the standard formulae for functional determinants established in the pre-existing literature. The next steps of the paper are to implement this method for general boundary conditions, treating the case of presence of zero-modes \(k = 0\) in the system. For the presence of zero modes, the generalized behaviour of the solutions \(u_{j,k}(1)\) in the integrand of the contour integral can be determined via integration by parts while exploiting properties of the Hilbert space inner product on \(\mathcal{L}^{2}[0,1]\), the details of which can be found here [\ref{func}]. The contour must now also be indented so as to avoid the zero mode at the origin. 
+
+\section{Problem and Applications}
+
+\subsection{Problem}
+
+The problem that this paper seeks to address is the presentation of an elegant contour integration method for determining the pre-existing standard formulae for ratios of functional determinants. Secondly, it also seeks to implement the aforementioned contour integration method to produce functional determinant formulae for a special class of these S-L problems. Analogs of the standard functional determinant formulae above (\ref{solution}) had yet to be discovered for the case of the presence of zero modes \((k = 0)\) in these S-L problems for general boundary conditions, as well as for systems of differential equations. For general boundary conditions, we switch to the first order matrix formulation for our S-L eigenvalue equation letting \(v_{j,k}(x) = u^{'}_{j,k}(x)\), that is:
+
+
+\begin{equation} \label{genDE}
+\frac{d}{dx} \begin{pmatrix} u_{j,k}(x) \\ v_{j,k}(x) \end{pmatrix} = \begin{pmatrix} 0 & 1\\- R_{j}(x) + k^2 & 0 \end{pmatrix} \begin{pmatrix} u_{j,k}(x) \\ v_{j,k}(x) \end{pmatrix}\\ \end{equation}
+
+General boundary conditions for our problem can be cast in matrix form as well:
+
+\begin{equation} \label{bc2}
+   M \begin{pmatrix} u_{j,k}(0) \\ v_{j,k}(0) \end{pmatrix} + N \begin{pmatrix} u_{j,k}(1) \\ v_{j,k}(1) \end{pmatrix} = 
+   \begin{pmatrix} 0 \\ 0 \end{pmatrix}\end{equation}
+   
+Where M and N are 2 x 2 matrices whose elements prescribe a given boundary condition governed by (\ref{bc2}). For example, Dirichlet conditions are produced via selection of the matrix elements 
+
+\begin{equation} \label{MN}
+M = \begin{pmatrix} 1 & 0\\0 & 0 \end{pmatrix} \hspace{10} N = \begin{pmatrix} 0 & 0\\0 & 1 \end{pmatrix} \end{equation} 
+   
+Utilizing this method for the case of presence of zero modes, the equation that governs the general boundary conditions for this problem can be written:
+
+\begin{equation} \label{bc3}
+   \det{(M + N W_{1,k}(1))} = k^2 \mathcal{B} \langle u_{1,0}(x)|u_{1,k}(x)\rangle
+\end{equation}
+   
+Where \(W_{j,k}(x)\) is the Wronskian of fundamental solutions to (\ref{genDE}), \(\mathcal{B}\) is a constant that depends on the form of M and N, and \(\langle u_{1,0}(x)|u_{1,k}(x)\rangle\) denotes the Hilbert space inner product on \(\mathcal{L}^{2}[0,1]\). The derivation for this condition is rather unwieldy, so we will omit it for the sake of brevity, but it generalizes the notions in the methodology and can be found here [\ref{func}]. The rest of the methodology for the contour integration analysis then carries over to this problem for presence of a zero-mode and general boundary conditions, with the exception that the k = 0 mode is avoided in the definition/deformation of the contour. Also, as stated above in the methodology, the slight recasting of the general boundary conditions in the limiting behaviour of k is implemented as well. \\
+   
+For the case of the presence of zero modes, the pre-existing procedures for calculating functional determinants have not held up to scrutiny thus far. A standard approach was to introduce a regularization (a method of assigning finite values to ill-defined quantities in the system) to the problem that rendered the zero modes non-zero, followed by an extraction of these modes, and then a removal of the regularization procedure [\ref{QFT}]. This was not ideal, as it was not clear that the process of regularization and then subsequent de-regularization did not alter the form of the final results for the functional determinants. The contour integration method for functional determinants removes the zero-mode at the beginning of the problem by deforming the integration contour appropriately, and thus no regularization is needed. At the time in the literature, different treatments of this problem considered general boundary conditions, or they considered the extraction of zero-modes, but not simultaneously--thus motivating the aims of this paper; it was an unsolved problem at the time to obtain analogs for zero-mode-extracted functional determinants for non-trivial boundary conditions.
+
+\subsection{Applications}
+
+Calculations of functional determinants arise in a branch of theoretical physics called Quantum Field Theory (QFT) which attempts to describe the dynamics of particles via a non-local field theoretic formulation by merging the results of special relativity, classical field theory, and quantum mechanics. Functional determinants are calculated in many areas of QFT including (but not limited to) quantum tunneling and nucleation processes, determination of effective actions and grand canonical potentials, and Lattice-Gauge theory in dynamical fermion computations [\ref{QFT}]. The contour integration method in this paper is implemented to include cases where a zero mode is present, but must be excluded in order to carry out the calculation for the functional determinant. In this process for QFT systems (specifically the path integral formulation), a linearization about a solution that varies in space or time can sometimes yield a quadratic form inside the exponential of the integrand of a path integral. The leading order approximation of this path integral is in the form of a functional determinant. In such a case, the corresponding linear differential operator in the problem may have a zero mode present (think state of zero-energy), and the zero mode must be removed in order to calculate a consistent leading order approximation for the path integral [\ref{func}, \ref{funcdet}, \ref{QFT}]. It is generally very difficult to treat these QFT problems of evaluating functional determinants while extracting a zero-mode for general boundary conditions, and thus the findings of this paper are extremely relevant to the development of this field of physics. 
+
+\section{Results}
+
+The standard functional determinant formula for Dirichlet boundary conditions and no zero modes present was reproduced via the contour integration method, and is:
+
+\begin{equation} \label{solution2}
+    \frac{\det{L_1}}{\det{L_2}} = \frac{c_2y_1(1)}{c_1y_2(1)} = \frac{y_1(1)y^{'}_2(0)}{y_2(1)y^{'}_1(0)}
+\end{equation} 
+
+Upon implementation of the contour integration method for functional determinants with a zero mode present and Dirichlet boundary conditions, the resulting formula for functional determinants was obtained as: 
+
+\begin{equation} \label{Dirichletzeromodesolution}
+   \frac{\det{L_1}}{\det{L_2}} = -\frac{\langle y_1(x)|y_1(x)\rangle}{y^{'}_1(1)^{*}y_2(1)}
+\end{equation}
+
+Where \(y_j\) refer to the solutions of the homogeneous problem \(L_jy = 0\) in the limit \( k \longrightarrow 0\), \(y^{*}\) denotes complex conjugation and the terms in the numerator on the right hand side are under an inner product as introduced above. Here the authors chose \(c_1 = 1\) and \(c_2 = 1\) for simplicity, since this was meant to just be a pedagogical example to motivate the next results below. \\
+
+
+When applying the contour integration method for functional determinants for general boundary conditions in the first order matrix formalism, the resulting formula for functional determinants was obtained as: 
+
+\begin{equation} \label{genboundssolution}
+   \frac{\det{L_1}}{\det{L_2}} = \frac{\det{(M+NY_1(1)})}{\det{(M + NY_2(1)})}
+\end{equation} 
+   
+Where M and N are the general 2x2 boundary condition matrices defined above, and \(Y_j(x)\) refers to the Wronskian of (\ref{bc3}) in the limit as \( k \longrightarrow 0\). This solution depends on the form of N and M, which are specified by the boundary conditions of a given S-L problem. \\
+
+Upon implementation of the contour integration method for functional determinants for general boundary conditions with a zero mode present in the first order matrix formalism, the resulting formula for functional determinants was obtained as: 
+
+\begin{equation} \label{genboundszeromodesol}
+   \frac{\det{L_1}}{\det{L_2}} = -\mathcal{B}\frac{\langle y_1(x)|y_1(x)\rangle}{\det{(M+NY_2(1)})}
+\end{equation}
+
+Where \(\mathcal{B}\) is the constant depending on N and M introduced above.\\
+
+There were two main findings of this paper. Firstly, the contour integration methods successfully reproduced the results of pre-existing functional integral techniques and regularization procedues that yield standard formula for functional determinants of linear differential operators, which can be seen in (\ref{solution2}). The other finding was that the contour integration method provided a useful generalization of the standard functional determinant formulae for the general boundary conditions case where zero modes are present, and must be extracted in order to obtain non-zero functional determinants, as seen in (\ref{genboundszeromodesol}). This contour integration approach is simple and elegant compared to the standard regularization and QFT functional integration methods for evaluation of functional determinants that currently exist in the field. In particular, the explicit analytical results of this paper in generalizing the standard functional determinant formulae (\ref{solution2}) to the case of zero-modes and general boundary conditions as seen in (\ref{Dirichletzeromodesolution}), (\ref{genboundssolution}), (\ref{genboundszeromodesol}) are of great interest and utility in applications in QFT as described above. 
+
+\section{Analysis}
+
+The paper does a successful job of tackling the problem they defined at the outset, with tangible analytical results for the functional determinant formulae via contour integration in the cases of Dirichlet boundary conditions, general boundary conditions, and presence of zero modes. The findings in this paper are highly applicable in the context of QFT, where linear differential operators are generally unbounded and thus the functional determinant 'ratio' formalism applies. These ratios of functional determinants can have important physical implications. To give a molecular dynamics example, consider the functional determinant problem of an oscillating particle. From the functional determinant, the ratio of kinetic energy for an oscillating particle versus a free one can be extracted [\ref{QFT2}]. Functional determinant formulae for the cases of general boundary conditions and zero modes are also highly sought after in the study of nucleation processes, false vacuum decay, and dynamical fermion models [\ref{QFT}]. For such cases, these applications are self-interacting scalar field theories with classical solutions that fluctuate according to a radial fluctuation operator that has degenerate zero modes--and thus require an extraction of the zero modes in order to yield the functional determinant ratios for these unbounded operators [\ref{QFT}]. It is of note that these functional determinant formulas depend on the homogeneous problems being analytically tractable, which is often not the case in physical applications [\ref{func}, \ref{funcdet}]. However, such fundamental solutions can be computed numerically, and thus the results from this paper can still be applied, albeit not so elegantly. This paper emphasized the elegance and simplicity of the contour method though, so in a practical sense there exists a kind of contradiction here. It is of note that this paper suffered in the quality of it's delivery as the authors stated that their emphasis was purportedly on readability instead of rigor, but the skipping of steps/lack of detail in explaining the technical aspects of the contour integration method ironically made it hard to follow the most important component of the methodology. 
+
+
+
+\section{Conclusion}
+
+In conclusion, this report provided a summary and analysis of the method of contour integration for functional determinants. The method was introduced simply for the case of Dirichlet boundary conditions and no zero modes in the methodology. The problem of generalizing the standard formulae for functional determinants with zero modes and general boundary conditions was presented in the next section, as well as an explanation of the applicability of this study as it relates to the field of QFT. The results of the paper were then stated, namely that the contour integration method reproduces the well-established standard formulae for functional determinants, and then successfully generalizes such formulae through implementation of the contour integration method for S-L problems with general boundary conditions and zero modes present. The paper was then critically analyzed weighing positive and negative criticisms. This paper was found to be highly relevant in the context of QFT, as it produced novel formulae for physically relevant problems. However, the practical implementation of the method resorts to numerical determination of the fundamental solutions to the homogeneous problem for a given physical differential operator, so the method is not completely analytic from a pragmatic standpoint. The paper also suffered in it's readability due to lack of detail in critical parts of the contour integration methodology. Overall, Functional Determinants via Contour Integration Methods by Klaus Kirsten and Alan J. McKane is a strong paper with excellent merit through its applications to Quantum Field Theory. 
+
+\clearpage
+
+\section{References}
+
+\begin{enumerate}
+    \item{Kirsten, Klaus, and Alan J. Mckane. “Functional Determinants by Contour Integration Methods.” Annals of Physics, vol. 308, no. 2, 2003, pp. 502–527., doi:10.1016/s0003-4916(03)00149-0.}\label{func}
+    \item{Branson, Thomas P. (1993),The functional determinant, Lecture Notes Series,4, Seoul: Seoul National University Research Institute of Mathematics Global Analysis Research Center,MR132546} \label{funcdet}
+    \item{Fucci, Guglielmo, et al. “Spectral Functions for Regular Sturm-Liouville Problems.” Journal of Mathematical Physics, vol. 56, no. 4, 2015, p. 043503., doi:10.1063/1.4918616.}\label{spec}
+    \item{Dunne, G V. “Functional Determinants in Quantum Field Theory .” INSPIRE, inspirehep.net/literature/767011.}\label{QFT}
+    \item{Frietas, Pedro.  "The spectral determinant of the isotropic quantum harmonic oscillator in arbitrary dimensions", Mathematische Annalen. 2018 vol. 372, no. 3, pp. 1081--1101}\label{QFT2}
+\end{enumerate}
+
+\end{document}
+
+
